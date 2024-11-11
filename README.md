@@ -1,37 +1,70 @@
-## 背景介绍
+# 博客图片自动化处理工具
 
-个人在写博客的时候，喜欢在本地 Obsidian 上先写笔记，然后才会上传到博客网站上。为了保证小站的运行速度，个人习惯于将笔记中的 PNG 图片转换为 Webp 格式然后再上传到腾讯对象存储上。但是时间一长就觉得麻烦了，所以有了这个脚本。该脚本主要实现的是将目标文件夹进行处理，将其中的图片转换为 Webp，然后根据当前的文件结构上传到 COS 上。
+## 📖 项目简介
 
-## 程序介绍
+本工具为博客图片处理自动化解决方案，提供WebP格式转换、腾讯云COS存储上传功能，包含以下核心模块：
+- cos_upload.py: 图片格式转换与清理
+- cos_upload.py: 腾讯云COS文件上传
+- main.py: 主流程控制
 
-程序主要有三个文件。
+## 🚀 核心功能
 
-- `main.py`: 主程序
-- w`ebp_convert.py`: Webp 转换
-- `cos_upload.py`: COS 上传
+1. **智能格式转换**  
+   - 支持PNG/JPG等格式转WebP（质量压缩20%）
+   - 自动清理原始图片文件
+   - 保留目录结构转换
 
-请在`cos_upload.py`中填写你的 COS 信息
+2. **云端同步**  
+   - 自动跳过已存在文件
+   - 实时上传进度反馈
+   - 支持多线程分块上传
 
-在`main.py`中填写本地中存放将要转换为 webp 格式的文件夹路径到`directory_path`变量中，程序支持的文件夹结构如下。
+3. **可视化交互**  
+   - 彩色终端输出状态
+   - 实时统计报表
+   - 异常错误提示
 
-- 主文件夹（本地）
-  - 子文件夹 1
-  - 子文件夹 2
-  - 子文件夹 3
-  - ...
+## ⚡ 快速开始
 
-在主文件下需要存在子文件，设置成这样是因为个人习惯为每个文章单独配置一个图片素材文件夹。对于这个结构来说，`directory_path`变量所代表的就是`主文件夹（本地）`的绝对路径。程序会将下`主文件夹（本地）`的所有图片转换为 Webp 格式，然后将子文件夹上传到目标 COS 上。
+```bash
+# 安装依赖
+pip install pillow cos-python-sdk-v5 colorama
 
-> 注意！！！图片转换后只会保留 Webp 格式的图片，原有的图片会被删除！！！
+# 配置密钥（编辑cos_upload.py）
+编辑 cos_upload.py
 
-除了本地路径外，还请填写 COS 中的路径到`cos_dir`变量中，最终上传到 COS 的文件夹结构如下
+# 运行主程序
+python main.py
+```
 
-- 主文件夹（COS 上）
-  - 子文件夹 1
-  - 子文件夹 2
-  - 子文件夹 3
-  - ...
+## ⚙ 配置说明
 
-`cos_dir`所代表的为`主文件夹（COS 上）`的路径，程序会在该目录下上传`主文件夹（本地）`下的子文件夹。
+1. **腾讯云密钥配置**  
 
-最终用 python 直接运行`main.py`即可
+   修改 cos_upload.py
+   ```python
+   secret_id = 'AKIDxxxxxxxxxxxxxxxxxxxxxxxx'  # 替换实际SecretID
+   secret_key = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx' # 替换实际SecretKey
+   ```
+
+2. **目录路径设置**  
+
+   修改 main.py
+   ```python
+   directory_path = r"C:\Users\worker\Pictures\Blog_webp"  # 本地图片根目录
+   ```
+
+## 📂 目录结构
+
+```
+博客图片上传/
+├── cos_upload.py    # COS上传核心逻辑
+├── main.py          # 主控制流程
+└── webp_convert.py  # 图片转换模块
+
+本地图片目录/
+└── Blog_webp/
+    ├── 文章1/       # 自动同步为COS的images/blog/文章1
+    ├── 文章2/
+    └── _temp_output # 临时转换目录（自动清理）
+```

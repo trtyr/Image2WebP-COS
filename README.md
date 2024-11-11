@@ -7,7 +7,7 @@
 程序主要有三个文件。
 
 - `main.py`: 主程序
-- w`ebp_convert.py`: Webp 转换
+- `ebp_convert.py`: Webp 转换
 - `cos_upload.py`: COS 上传
 
 请在`cos_upload.py`中填写你的 COS 信息
